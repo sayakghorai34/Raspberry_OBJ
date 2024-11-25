@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 
 // Stream Route
 app.get("/stream", (req, res) => {
-  res.redirect(`${PYTHON_SERVER}/stream`); // Redirect to the Python server's camera stream
+  res.redirect(`http://localhost:8000/stream`); // Redirect to the Python server's camera stream
 });
 
 // Upload Image
