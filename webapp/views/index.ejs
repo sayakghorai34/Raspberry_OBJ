@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Server Frontend</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Python YOLO Server Frontend</h1>
+  </header>
+
+  <section>
+    <h2>Live Camera Stream</h2>
+    <a href="/stream" target="_blank">
+      <button>View Stream</button>
+    </a>
+  </section>
+
+  <section>
+    <h2>Upload Image</h2>
+    <form action="/upload/image" method="POST" enctype="multipart/form-data">
+      <input type="file" name="image" accept="image/*" required>
+      <button type="submit">Upload Image</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Upload Video</h2>
+    <form action="/upload/video" method="POST" enctype="multipart/form-data">
+      <input type="file" name="video" accept="video/mp4" required>
+      <button type="submit">Upload Video</button>
+    </form>
+  </section>
+
+  <% if (message) { %>
+    <section>
+      <h2>Result</h2>
+      <p><%= message %></p>
+
+      <% if (imgData) { %>
+        <h3>Processed Image</h3>
+        <img src="data:image/jpeg;base64,<%= imgData %>" alt="Processed Image" style="max-width: 100%; height: auto;">
+
+        <% if (classCounts) { %>
+          <h3>Detected Classes</h3>
+          <table border="1">
+            <thead>
+              <tr>
+                <th>Class</th>
+                <th>Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (const [className, count] of Object.entries(classCounts)) { %>
+                <tr>
+                  <td><%= className %></td>
+                  <td><%= count %></td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        <% } %>
+      <% } %>
+
+      <% if (videoData) { %>
+        <h3>Processed Video</h3>
+        <video controls>
+          <source src="<%= videoData %>" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      <% } %>
+    </section>
+  <% } %>
+</body>
+</html>
