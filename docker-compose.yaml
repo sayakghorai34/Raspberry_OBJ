@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   server:
-    build:
-      context: ./server  # Path to the server directory
-      dockerfile: Dockerfile
+    image: python-server-img  # Use the prebuilt server image
     container_name: python-server  # Assign a name to the server container
     volumes:
       - /run/udev:/run/udev:ro  # Map /run/udev for privileged access
@@ -17,11 +15,10 @@ services:
     privileged: true  # Allow access to hardware resources
     environment:
       - PYTHONUNBUFFERED=1  # Avoid buffering Python output
+    command: ["python3", "-m", "src.main.scripts.run_server", "--port", "8000"]  # Replace with the Python command you want to run
 
   webapp:
-    build:
-      context: ./webapp  # Path to the web app directory
-      dockerfile: Dockerfile
+    image: node-webapp-img  # Use the prebuilt webapp image
     container_name: node-webapp  # Assign a name to the web app container
     ports:
       - "3000:3000"  # Map web app port to host
@@ -30,6 +27,7 @@ services:
     restart: always  # Restart the container on failure
     environment:
       - SERVER_URL=http://python-server:8000  # URL to access the server app
+    command: ["node", "app.js"]  # Replace with the Node.js command you want to run
 
 networks:
   app-network:

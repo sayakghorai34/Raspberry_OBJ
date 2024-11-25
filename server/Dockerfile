@@ -32,4 +32,4 @@ RUN pip3 install --break-system-packages --no-cache-dir -r requirements.txt
 EXPOSE 8000
 
 # Run the server
-CMD ["python3", "-m", "src.main.scripts.run_server", "--port", "8000"]
+# CMD ["python3", "-m", "src.main.scripts.run_server", "--port", "8000"]
