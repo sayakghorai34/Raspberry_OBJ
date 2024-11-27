@@ -135,7 +135,6 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
             cap.release()
             writer.release()
-
             # Stream processed video in chunks
             self.send_response(200)
             self.send_header("Content-Type", "video/mp4")
