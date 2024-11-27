@@ -3,7 +3,6 @@ opencv-python-headless==4.9.0.80
 ultralytics
 onnx
 onnxruntime
-numpy==1.23.5
 onnxslim
 ncnn
 pybuilder
