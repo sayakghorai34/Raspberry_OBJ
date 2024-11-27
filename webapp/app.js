@@ -70,7 +70,7 @@ app.post("/upload/video", upload.single("video"), async (req, res) => {
 
     const response = await axios.post(`${PYTHON_SERVER}/upload/video`, videoData, {
       headers: { "Content-Type": "video/mp4" },
-      responseType: "arraybuffer", // Receive binary data
+      responseType: "arraybuffer", 
     });
 
     const videoBase64 = Buffer.from(response.data, "binary").toString("base64");
@@ -79,8 +79,8 @@ app.post("/upload/video", upload.single("video"), async (req, res) => {
     res.render("index", {
       message: "Video processed successfully!",
       videoData: videoSrc,
-      imgData: null, // Include imgData and set to null
-      classCounts: null // Include classCounts and set to null
+      imgData: null, 
+      classCounts: null 
     });
   } catch (error) {
     console.error(error);

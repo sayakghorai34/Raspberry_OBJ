@@ -2,17 +2,17 @@ version: '3.8'
 
 services:
   server:
-    image: python-server-img  # Use the prebuilt server image
-    container_name: python-server  # Assign a name to the server container
+    image: python-server-img 
+    container_name: python-server  
     volumes:
-      - /run/udev:/run/udev:ro  # Map /run/udev for privileged access
-      - ./shared_vol:/tmp/annotated_output  # Shared volume for output
+      - /run/udev:/run/udev:ro 
+      - ./shared_vol:/tmp/annotated_output  
     ports:
-      - "8000:8000"  # Map server port to host
+      - "8000:8000"  
     networks:
-      - app-network  # Attach server to a shared network
-    restart: always  # Restart the container on failure
-    privileged: true  # Allow access to hardware resources
+      - app-network 
+    restart: always 
+    privileged: true 
     environment:
       - PYTHONUNBUFFERED=1  # Avoid buffering Python output
     command: ["python3", "-m", "src.main.scripts.run_server", "--port", "8000"]  # Replace with the Python command you want to run
@@ -23,12 +23,12 @@ services:
     ports:
       - "3000:3000"  # Map web app port to host
     networks:
-      - app-network  # Attach web app to a shared network
-    restart: always  # Restart the container on failure
+      - app-network 
+    restart: always 
     environment:
       - SERVER_URL=http://python-server:8000  # URL to access the server app
-    command: ["node", "app.js"]  # Replace with the Node.js command you want to run
+    command: ["node", "app.js"]  
 
 networks:
   app-network:
-    driver: bridge  # Create a bridge network for inter-container communication
+    driver: bridge  
