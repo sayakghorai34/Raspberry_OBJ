@@ -135,23 +135,25 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
             cap.release()
             writer.release()
-            # Stream processed video in chunks
-            self.send_response(200)
-            self.send_header("Content-Type", "video/mp4")
-            self.send_header("Transfer-Encoding", "chunked")
-            self.end_headers()
 
+            # Encode processed video
             with open(temp_output.name, "rb") as video_file:
-                chunk_size = 1024 * 1024  # 1 MB
-                while True:
-                    chunk = video_file.read(chunk_size)
-                    if not chunk:
-                        break
-                    self.wfile.write(chunk)
+                video_data = base64.b64encode(video_file.read()).decode('utf-8')
 
-    # Cleanup
+        # Cleanup
         os.remove(video_path)
         os.remove(temp_output.name)
+
+        # Prepare response
+        response = {
+            "message": "Video processed",
+            "video_data": video_data
+        }
+
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps(response).encode())
 
 
 
