@@ -3,7 +3,7 @@ from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
 
 class CameraManager:
-    def __init__(self, resolution=(640, 640)):
+    def __init__(self, resolution=(244, 244)):
         """Initialize the camera with given resolution."""
         self.picam2 = Picamera2()
         self.resolution = resolution
@@ -21,6 +21,6 @@ class CameraManager:
         """Start recording with the specified output."""
         self.picam2.start_recording(JpegEncoder(), FileOutput(output))
         
-    def stop_recording(self):
+    def stop_recording(self): 
         """Stop recording."""
         self.picam2.stop_recording()

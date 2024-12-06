@@ -61,11 +61,11 @@ class InferenceModel:
         result = results[0].plot()
         cv2.putText(
             result, 
-            f"Class 0 Count: {class_0_count}", 
+            f"Human Count: {class_0_count}", 
             (10, 50), 
             cv2.FONT_HERSHEY_SIMPLEX, 
             1, 
-            (0, 255, 0), 
+            (0, 0, 255), 
             2
         )
         

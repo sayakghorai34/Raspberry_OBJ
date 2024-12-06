@@ -19,7 +19,7 @@ from collections import Counter
 
 # Parse command line arguments
 parser = argparse.ArgumentParser(description="Server for camera streaming, video, and image processing")
-parser.add_argument("--resolution", type=str, help="Video resolution in WIDTHxHEIGHT format (default: 640x640)", default="640x640")
+parser.add_argument("--resolution", type=str, help="Video resolution in WIDTHxHEIGHT format (default: 244x244)", default="244x244")
 parser.add_argument("--port", type=int, help="Port number for the server (default: 8000)", default=8000)
 args = parser.parse_args()
 

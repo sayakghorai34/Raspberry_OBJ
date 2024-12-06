@@ -12,8 +12,8 @@ def parse_args():
     parser.add_argument(
         "--resolution",
         type=str,
-        help="Video resolution in WIDTHxHEIGHT format (default: 640x640)",
-        default="640x640"
+        help="Video resolution in WIDTHxHEIGHT format (default: 244x244)",
+        default="244x244"
     )
     parser.add_argument(
         "--port",
