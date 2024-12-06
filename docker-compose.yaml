@@ -14,19 +14,19 @@ services:
     restart: always 
     privileged: true 
     environment:
-      - PYTHONUNBUFFERED=1  # Avoid buffering Python output
-    command: ["python3", "-m", "src.main.scripts.run_server", "--port", "8000"]  # Replace with the Python command you want to run
+      - PYTHONUNBUFFERED=1
+    command: ["python3", "-m", "src.main.scripts.run_server", "--port", "8000"]
 
   webapp:
-    image: node-webapp-img  # Use the prebuilt webapp image
-    container_name: node-webapp  # Assign a name to the web app container
+    image: node-webapp-img 
+    container_name: node-webapp
     ports:
-      - "3000:3000"  # Map web app port to host
+      - "3000:3000"  
     networks:
       - app-network 
     restart: always 
     environment:
-      - SERVER_URL=http://python-server:8000  # URL to access the server app
+      - SERVER_URL=http://python-server:8000  
     command: ["node", "app.js"]  
 
 networks:
