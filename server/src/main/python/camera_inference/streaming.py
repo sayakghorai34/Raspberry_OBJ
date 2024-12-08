@@ -14,7 +14,7 @@ class StreamingOutput(io.BufferedIOBase):
 
     def run_inference(self, img):
         """Run inference on the image and update frame buffer."""
-        result = self.inference_model.process_frame(img)
+        result = self.inference_model.process_frame_fixed(img)
         _, buf = cv2.imencode('.jpg', result)
         buf = buf.tobytes()
 

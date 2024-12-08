@@ -3,7 +3,7 @@ from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
 
 class CameraManager:
-    def __init__(self, resolution=(244, 244)):
+    def __init__(self, resolution=(256, 256)):
         """Initialize the camera with given resolution."""
         self.picam2 = Picamera2()
         self.resolution = resolution

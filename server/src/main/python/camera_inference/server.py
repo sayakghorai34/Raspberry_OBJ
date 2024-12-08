@@ -6,7 +6,7 @@ import json
 import base64
 import cv2
 import os
-from .utils import save_annotated_image
+from .utils import save_annotated_image, save_annotated_video
 
 class StreamingHandler(server.BaseHTTPRequestHandler):
     def __init__(self, *args, output=None, inference_model=None, **kwargs):
@@ -56,52 +56,6 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 str(e)
             )
 
-    # def _handle_video_upload(self):
-    #     """Handle video upload and processing."""
-    #     length = int(self.headers['Content-Length'])
-    #     body = self.rfile.read(length)
-
-    #     with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as video_file:
-    #         video_file.write(body)
-    #         video_path = video_file.name
-
-    #     # Process video
-    #     cap = cv2.VideoCapture(video_path)
-    #     fps = int(cap.get(cv2.CAP_PROP_FPS))
-    #     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    #     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        
-    #     with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_output:
-    #         fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-    #         writer = cv2.VideoWriter(
-    #             temp_output.name, 
-    #             fourcc, 
-    #             fps, 
-    #             (width, height)
-    #         )
-
-    #         while cap.isOpened():
-    #             ret, frame = cap.read()
-    #             if not ret:
-    #                 break
-    #             result = self.inference_model.process_frame(frame)
-    #             writer.write(result)
-
-    #         cap.release()
-    #         writer.release()
-
-    #         # Return processed video
-    #         with open(temp_output.name, "rb") as video_file:
-    #             video_data = video_file.read()
-
-    #     # Cleanup
-    #     os.remove(video_path)
-    #     os.remove(temp_output.name)
-
-    #     self.send_response(200)
-    #     self.send_header("Content-Type", "video/mp4")
-    #     self.end_headers()
-    #     self.wfile.write(video_data)
     def _handle_video_upload(self):
         """Handle video upload and processing."""
         length = int(self.headers['Content-Length'])
@@ -116,33 +70,24 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
         fps = int(cap.get(cv2.CAP_PROP_FPS))
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_output:
-            fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-            writer = cv2.VideoWriter(
-                temp_output.name, 
-                fourcc, 
-                fps, 
-                (width, height)
-            )
+        annotated_frames = []
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                break
+            result = self.inference_model.process_frame_dynamic(frame)
+            annotated_frames.append(result)
 
-            while cap.isOpened():
-                ret, frame = cap.read()
-                if not ret:
-                    break
-                result = self.inference_model.process_frame(frame)
-                writer.write(result)
-
-            cap.release()
-            writer.release()
-
-            # Encode processed video
-            with open(temp_output.name, "rb") as video_file:
-                video_data = base64.b64encode(video_file.read()).decode('utf-8')
+        cap.release()
+        output_path = save_annotated_video(annotated_frames, os.path.basename(video_path))
+        # Encode vid
+        video_data = None
+        with open(output_path, "rb") as video_file:
+            video_data = base64.b64encode(video_file.read()).decode('utf-8')
 
         # Cleanup
         os.remove(video_path)
-        os.remove(temp_output.name)
+        os.remove(output_path)
 
         # Prepare response
         response = {

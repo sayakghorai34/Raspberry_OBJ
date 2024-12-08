@@ -167,5 +167,9 @@ cython_debug/
 /webapp/uploads/
 /shared_vol/
 .DS_Store
-
-
+test.py
+trial.py
+sample.py
+example.py
+yolov8n.onnx
+yolov8n.pt
